@@ -105,8 +105,11 @@ class MainWindow:
         def loader(devices):
             for dev in devices:
                 self.w.device_liststore.append(dev)
-            else:
+
+            if devices:
                 self.w.device_combobox.set_active(0)
+                self.w.scan_action.set_sensitive(True)
+
             return False
         
         thread = threading.Thread(target=initer)

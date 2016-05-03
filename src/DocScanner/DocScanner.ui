@@ -58,6 +58,7 @@
   <object class="GtkAction" id="scan_action">
     <property name="label" translatable="yes">Scan Document</property>
     <property name="short_label" translatable="yes">Scan</property>
+    <property name="sensitive">False</property>
     <signal name="activate" handler="on_scan_action_activate" swapped="no"/>
   </object>
   <object class="GtkEntryCompletion" id="title_entrycompletion"/>
