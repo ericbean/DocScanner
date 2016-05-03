@@ -15,7 +15,7 @@
     </columns>
   </object>
   <object class="GtkFileFilter" id="folder_filefilter"/>
-  <object class="GtkFileChooserDialog" id="filechooserdialog1">
+  <object class="GtkFileChooserDialog" id="cwd_filechooserdialog">
     <property name="can_focus">False</property>
     <property name="type_hint">normal</property>
     <property name="gravity">center</property>
@@ -196,10 +196,11 @@ Directory</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserButton" id="filechooserbutton1">
+                  <object class="GtkFileChooserButton" id="cwd_filechooserbutton">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="dialog">filechooserdialog1</property>
+                    <property name="action">select-folder</property>
+                    <property name="dialog">cwd_filechooserdialog</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
