@@ -14,7 +14,6 @@ HIDDENFILENAME = '.docscanner.png'
 def scan(devid):
     dev = sane.open(devid)
     params = dev.get_parameters()
-#    print('Device parameters:', params) #FIXME
 
     dev.start()
     im = dev.snap()

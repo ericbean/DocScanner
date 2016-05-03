@@ -2,12 +2,13 @@
 # Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
 
 from datetime import date
+import threading
 import os
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
-from DocScanner import imaging
+from gi.repository import Gtk, GdkPixbuf, GLib
+from DocScanner import imaging, util
 
 UIDIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -25,21 +26,14 @@ class BuilderHelper:
 
 
 class MainWindow:
-    def __init__(self, devices):
+    def __init__(self):
         self.builder = Gtk.Builder()
         self.builder.add_from_file(UIDIR+'/DocScanner.ui')
         self.builder.connect_signals(self)
+        #init sane and get devices
+        self.load_sane_devices()
         self.w = BuilderHelper(self.builder)
-        self.device_liststore = self.builder.get_object('device_liststore')
-        
-        for dev in devices:
-            self.device_liststore.append(dev)
-        else:
-            cb = self.builder.get_object('device_combobox')
-            cb.set_active(0)
-        
-        window = self.builder.get_object('window1')
-        window.show_all()
+        self.w.window1.show_all()
 
 
     def on_window1_delete_event(self, *args):
@@ -47,8 +41,7 @@ class MainWindow:
 
     
     def on_scan_action_activate(self, *args): #FIXME *args
-        print("scan activated")
-        cb = self.builder.get_object('device_combobox')
+        cb = self.w.device_combobox
         aid = cb.get_active_id()
         surface = imaging.scan(aid)
         self.set_image_helper()
@@ -99,10 +92,31 @@ class MainWindow:
         self.w.fn_entry.set_text(fn)
         
 
+    def load_sane_devices(self):
+        """Init sane and load device info without blocking the
+        main thread.
+        """
 
+        def initer():
+            sane_version, devices = util.init_sane()
+            if devices:
+                GLib.idle_add(loader, devices)
 
-def guimain(sane_version, devices):
-    mw = MainWindow(devices)
+        def loader(devices):
+            for dev in devices:
+                self.w.device_liststore.append(dev)
+            else:
+                self.w.device_combobox.set_active(0)
+            return False
+        
+        thread = threading.Thread(target=initer)
+        thread.daemon = True
+        thread.start()
+
+##############################################################################
+
+def main(*args):
+    mw = MainWindow()
     Gtk.main()
 
 
