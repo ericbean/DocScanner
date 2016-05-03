@@ -24,6 +24,7 @@ class BuilderHelper:
         self.__setattr__(name, w)
         return w
 
+##############################################################################
 
 class MainWindow:
     def __init__(self):
@@ -63,9 +64,9 @@ class MainWindow:
 
 
     def set_image_helper(self):
-        path = imaging.HIDDENFILENAME
+        path = imaging.TEMPFILENAME
         if os.path.exists(path):
-            im = self.builder.get_object('image1')
+            im = self.w.image1
             rect = im.get_allocation()
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, -1,
                 rect.height, True)
@@ -90,7 +91,7 @@ class MainWindow:
             fn = date_text + '-' + title + "_" + i +".png"
         
         self.w.fn_entry.set_text(fn)
-        
+
 
     def load_sane_devices(self):
         """Init sane and load device info without blocking the

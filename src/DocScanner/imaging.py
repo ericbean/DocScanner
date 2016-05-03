@@ -9,7 +9,9 @@ import numpy
 import cairo
 from PIL import Image, ImageFilter, ImageChops
 
-HIDDENFILENAME = '.docscanner.png'
+#Workaround for missing cairo.ImageSurface.create_for_data implementation
+#save to temp png then load into Gtk image widget
+TEMPFILENAME = '.docscanner.png'
 
 def scan(devid):
     dev = sane.open(devid)
@@ -24,11 +26,11 @@ def scan(devid):
     bbox = diff.getbbox()
     if bbox:
         im3 = im.crop(bbox)
-        im3.save(HIDDENFILENAME)
+        im3.save(TEMPFILENAME)
     else:
-        im.save(HIDDENFILENAME)
+        im.save(TEMPFILENAME)
 
-    surface = cairo.ImageSurface.create_from_png(HIDDENFILENAME)
+    surface = cairo.ImageSurface.create_from_png(TEMPFILENAME)
     return surface
 
 
@@ -40,4 +42,4 @@ def np_to_surface(arr):
 
 def save_file(filename):
     print(filename)
-    shutil.move(HIDDENFILENAME, filename)
+    shutil.move(TEMPFILENAME, filename)
