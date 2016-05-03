@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 # Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
 
 from datetime import date
@@ -122,5 +122,7 @@ def main(*args):
     mw = MainWindow()
     Gtk.main()
 
+if __name__ == '__main__':
+    main()
 
 
