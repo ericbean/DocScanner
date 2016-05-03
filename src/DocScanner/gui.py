@@ -34,6 +34,8 @@ class MainWindow:
         #init sane and get devices
         self.load_sane_devices()
         self.w = BuilderHelper(self.builder)
+        #set default a working dir for the saved images
+        self.w.cwd_filechooserbutton.set_filename(os.path.expanduser('~'))
         self.w.window1.show_all()
 
 
@@ -49,9 +51,11 @@ class MainWindow:
 
 
     def on_save_action_activate(self, *args):
+        folder = self.w.cwd_filechooserbutton.get_filename()
         filename = self.w.fn_entry.get_text()
-        imaging.save_file(filename)
-        self.w.image1.clear()
+        if os.path.exists(imaging.TEMPFILENAME):
+            imaging.save_file(folder + '/' + filename)
+            self.w.image1.clear()
 
 
     def on_window1_configure_event(self, *args):
