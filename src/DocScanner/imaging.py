@@ -1,4 +1,6 @@
 
+# Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
+
 import shutil
 import os
 

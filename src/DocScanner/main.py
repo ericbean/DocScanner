@@ -1,4 +1,5 @@
 
+# Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
 
 import sane
 
