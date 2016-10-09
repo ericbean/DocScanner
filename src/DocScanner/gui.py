@@ -40,9 +40,25 @@ class MainWindow:
         self.w.window1.show_all()
 
         # most recent scanned image
-        self.scanned_image = None
+        self._scanned_image = None
         # tempfile
         self.tempfile = None
+
+
+    @property
+    def scanned_image(self):
+        return self._scanned_image
+
+
+    @scanned_image.setter
+    def scanned_image(self, value):
+        self._scanned_image = value
+        if value is None:
+            self.w.image1.clear()
+            self.w.save_action.set_sensitive(False)
+            self.w.image1.clear()
+        else:
+            self.w.save_action.set_sensitive(True)
 
 
     def on_window1_delete_event(self, *args):

@@ -53,6 +53,7 @@
     <property name="label" translatable="yes">Save</property>
     <property name="short_label" translatable="yes">Save</property>
     <property name="stock_id">gtk-save</property>
+    <property name="sensitive">False</property>
     <signal name="activate" handler="on_save_action_activate" swapped="no"/>
   </object>
   <object class="GtkAction" id="scan_action">
