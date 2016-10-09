@@ -16,7 +16,7 @@ UIDIR = os.path.dirname(os.path.realpath(__file__))
 class BuilderHelper:
     def __init__(self, builder):
         self.builder = builder
-    
+
     def __getattr__(self, name):
         w = self.builder.get_object(name)
         if w is None:
@@ -48,7 +48,7 @@ class MainWindow:
     def on_window1_delete_event(self, *args):
         Gtk.main_quit(*args)
 
-    
+
     def on_scan_action_activate(self, *args): #FIXME *args
         cb = self.w.device_combobox
         aid = cb.get_active_id()
@@ -98,11 +98,11 @@ class MainWindow:
         if not date_text:
             date_text = str(date.today())
         fn = date_text + '-' + title + ".png"
-        
+
         i = 1
         while os.path.exists(fn):
             fn = date_text + '-' + title + "_" + i +".png"
-        
+
         self.w.fn_entry.set_text(fn)
 
 
@@ -125,7 +125,7 @@ class MainWindow:
                 self.w.scan_action.set_sensitive(True)
 
             return False
-        
+
         thread = threading.Thread(target=initer)
         thread.daemon = True
         thread.start()
