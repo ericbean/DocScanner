@@ -64,7 +64,6 @@
   <object class="GtkEntryCompletion" id="title_entrycompletion"/>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <signal name="configure-event" handler="on_window1_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_window1_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">

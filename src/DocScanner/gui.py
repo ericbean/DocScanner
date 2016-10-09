@@ -71,10 +71,6 @@ class MainWindow:
             self.w.image1.clear()
 
 
-    def on_window1_configure_event(self, *args):
-        self.set_image_helper()
-
-
     def on_image1_configure_event(self, *args):
         print("image1")
         print(args)
