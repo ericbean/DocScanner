@@ -2,6 +2,7 @@
 # Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
 
 from datetime import date
+import tempfile
 import threading
 import os
 
@@ -38,6 +39,11 @@ class MainWindow:
         self.w.cwd_filechooserbutton.set_filename(os.path.expanduser('~'))
         self.w.window1.show_all()
 
+        # most recent scanned image
+        self.scanned_image = None
+        # tempfile
+        self.tempfile = None
+
 
     def on_window1_delete_event(self, *args):
         Gtk.main_quit(*args)
@@ -46,7 +52,14 @@ class MainWindow:
     def on_scan_action_activate(self, *args): #FIXME *args
         cb = self.w.device_combobox
         aid = cb.get_active_id()
-        surface = imaging.scan(aid)
+        # TODO make this asynchronous
+        self.scanned_image = imaging.scan(aid)
+        # segfaults or aborts here with
+        # python3: cairo-surface.c:928: cairo_surface_reference: Assertion
+        #   `((*&(&surface->ref_count)->ref_count) > 0)' failed.
+        # surface & format doesn't matter
+        #self.w.image1.set_from_surface(self.scanned_image)
+        # use set_image_helper to dump to a tempfile as a workaround
         self.set_image_helper()
 
 
@@ -68,13 +81,13 @@ class MainWindow:
 
 
     def set_image_helper(self):
-        path = imaging.TEMPFILENAME
-        if os.path.exists(path):
-            im = self.w.image1
-            rect = im.get_allocation()
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, -1,
-                rect.height, True)
-            im.set_from_pixbuf(pixbuf)
+        self.tempfile = tempfile.NamedTemporaryFile()
+        self.scanned_image.write_to_png(self.tempfile)
+        rect = self.w.image1.get_allocation()
+        fname = self.tempfile.name
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(fname, -1,
+            rect.height, True)
+        self.w.image1.set_from_pixbuf(pixbuf)
 
 
     def on_title_entry_changed(self, *args):
