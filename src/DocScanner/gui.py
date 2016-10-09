@@ -82,9 +82,8 @@ class MainWindow:
     def on_save_action_activate(self, *args):
         folder = self.w.cwd_filechooserbutton.get_filename()
         filename = self.w.fn_entry.get_text()
-        if os.path.exists(imaging.TEMPFILENAME):
-            imaging.save_file(folder + '/' + filename)
-            self.w.image1.clear()
+        if self.scanned_image:
+            self.scanned_image.write_to_png(folder + '/' + filename)
 
 
     def on_image1_configure_event(self, *args):
