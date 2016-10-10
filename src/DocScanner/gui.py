@@ -5,6 +5,7 @@ from datetime import date
 import tempfile
 import threading
 import os
+import sys
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -27,8 +28,9 @@ class BuilderHelper:
 
 ##############################################################################
 
-class MainWindow:
-    def __init__(self):
+class MainWindowHandler:
+    def __init__(self, gtk_app):
+        self.gtk_app = gtk_app
         self.builder = Gtk.Builder()
         self.builder.add_from_file(UIDIR+'/DocScanner.ui')
         self.builder.connect_signals(self)
@@ -37,11 +39,15 @@ class MainWindow:
         self.w = BuilderHelper(self.builder)
         #set default a working dir for the saved images
         self.w.cwd_filechooserbutton.set_filename(os.path.expanduser('~'))
+
+        # add header seperately since Glade can't do it yet
+        self.w.window1.set_titlebar(self.w.headerbar)
         self.w.window1.show_all()
 
         # most recent scanned image
         self._scanned_image = None
 
+        print("MainWindowHandler inited")
 
     @property
     def scanned_image(self):
@@ -146,9 +152,25 @@ class MainWindow:
 
 ##############################################################################
 
+class DocScannerApp(Gtk.Application):
+    def __init__(self):
+        Gtk.Application.__init__(self)
+
+
+    def do_activate(self):
+        main_window = MainWindowHandler(self)
+        self.add_window(main_window.w.window1)
+
+
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+
+##############################################################################
+
 def main(*args):
-    mw = MainWindow()
-    Gtk.main()
+    app = DocScannerApp()
+    exit_status = app.run(sys.argv)
+    sys.exit(exit_status)
 
 if __name__ == '__main__':
     main()

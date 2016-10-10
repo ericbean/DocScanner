@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkListStore" id="device_liststore">
@@ -62,10 +62,65 @@
     <property name="sensitive">False</property>
     <signal name="activate" handler="on_scan_action_activate" swapped="no"/>
   </object>
-  <object class="GtkEntryCompletion" id="title_entrycompletion"/>
-  <object class="GtkWindow" id="window1">
+  <object class="GtkHeaderBar" id="headerbar">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <signal name="delete-event" handler="on_window1_delete_event" swapped="no"/>
+    <property name="title">DocScanner</property>
+    <property name="show_close_button">True</property>
+    <child>
+      <object class="GtkButton" id="scan_button">
+        <property name="label" translatable="yes">Scan</property>
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">scan_action</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="save_button">
+        <property name="label" translatable="yes">Save</property>
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">save_action</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="device_combobox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="model">device_liststore</property>
+        <property name="id_column">0</property>
+        <child>
+          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+          <attributes>
+            <attribute name="text">1</attribute>
+          </attributes>
+        </child>
+        <child>
+          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+          <attributes>
+            <attribute name="text">2</attribute>
+          </attributes>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkEntryCompletion" id="title_entrycompletion"/>
+  <object class="GtkApplicationWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="show_menubar">False</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -218,67 +273,13 @@ Directory</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="headerbar1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title">DocScanner</property>
-        <property name="show_close_button">True</property>
-        <child>
-          <object class="GtkButton" id="scan_button">
-            <property name="label" translatable="yes">Scan</property>
-            <property name="use_action_appearance">True</property>
-            <property name="related_action">scan_action</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="save_button">
-            <property name="label" translatable="yes">Save</property>
-            <property name="use_action_appearance">True</property>
-            <property name="related_action">save_action</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBox" id="device_combobox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="model">device_liststore</property>
-            <property name="id_column">0</property>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-              <attributes>
-                <attribute name="text">1</attribute>
-              </attributes>
-            </child>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext2"/>
-              <attributes>
-                <attribute name="text">2</attribute>
-              </attributes>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
+      <placeholder/>
     </child>
   </object>
 </interface>
