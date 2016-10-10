@@ -47,8 +47,6 @@ class MainWindowHandler:
         # most recent scanned image
         self._scanned_image = None
 
-        print("MainWindowHandler inited")
-
     @property
     def scanned_image(self):
         return self._scanned_image
