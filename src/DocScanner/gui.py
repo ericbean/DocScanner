@@ -41,8 +41,8 @@ class MainWindowHandler:
         self.w.cwd_filechooserbutton.set_filename(os.path.expanduser('~'))
 
         # add header seperately since Glade can't do it yet
-        self.w.window1.set_titlebar(self.w.headerbar)
-        self.w.window1.show_all()
+        self.w.main_window.set_titlebar(self.w.headerbar)
+        self.w.main_window.show_all()
 
         # most recent scanned image
         self._scanned_image = None
@@ -65,7 +65,7 @@ class MainWindowHandler:
             self.w.save_action.set_sensitive(True)
 
 
-    def on_window1_delete_event(self, *args):
+    def on_main_window_delete_event(self, *args):
         Gtk.main_quit(*args)
 
 
@@ -159,7 +159,7 @@ class DocScannerApp(Gtk.Application):
 
     def do_activate(self):
         main_window = MainWindowHandler(self)
-        self.add_window(main_window.w.window1)
+        self.add_window(main_window.w.main_window)
 
 
     def do_startup(self):

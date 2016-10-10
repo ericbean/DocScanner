@@ -118,7 +118,7 @@
     </child>
   </object>
   <object class="GtkEntryCompletion" id="title_entrycompletion"/>
-  <object class="GtkApplicationWindow" id="window1">
+  <object class="GtkApplicationWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="show_menubar">False</property>
     <child>
