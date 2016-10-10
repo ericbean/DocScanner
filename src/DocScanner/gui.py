@@ -41,8 +41,6 @@ class MainWindow:
 
         # most recent scanned image
         self._scanned_image = None
-        # tempfile
-        self.tempfile = None
 
 
     @property
@@ -76,7 +74,7 @@ class MainWindow:
         # surface & format doesn't matter
         #self.w.image1.set_from_surface(self.scanned_image)
         # use set_image_helper to dump to a tempfile as a workaround
-        self.set_image_helper()
+        self._set_image_helper()
 
 
     def on_save_action_activate(self, *args):
@@ -91,14 +89,15 @@ class MainWindow:
         print(args)
 
 
-    def set_image_helper(self):
-        self.tempfile = tempfile.NamedTemporaryFile()
-        self.scanned_image.write_to_png(self.tempfile)
+    def _set_image_helper(self):
         rect = self.w.image1.get_allocation()
-        fname = self.tempfile.name
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(fname, -1,
-            rect.height, True)
-        self.w.image1.set_from_pixbuf(pixbuf)
+        # dump surface to file and load into a GdkPixbuf scaled to fit
+        # the Gtk.Image's allocation
+        with tempfile.NamedTemporaryFile() as tempfile:
+            self.scanned_image.write_to_png(tempfile)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(tempfile.name, -1,
+                rect.height, True)
+            self.w.image1.set_from_pixbuf(pixbuf)
 
 
     def on_title_entry_changed(self, *args):
