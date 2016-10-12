@@ -9,7 +9,7 @@ import sys
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf, GLib
+from gi.repository import Gio, Gtk, GdkPixbuf, GLib
 from DocScanner import imaging, util
 
 UIDIR = os.path.dirname(os.path.realpath(__file__))
@@ -40,12 +40,21 @@ class MainWindowHandler:
         #set default a working dir for the saved images
         self.w.cwd_filechooserbutton.set_filename(os.path.expanduser('~'))
 
+        # add scan & save actions for main_window and disable them
+        for action_name in ('save', 'scan'):
+            action = Gio.SimpleAction.new(action_name, None)
+            action.set_enabled(False)
+            callback = getattr(self, 'on_' + action_name + '_action_activate')
+            action.connect('activate', callback)
+            self.w.main_window.add_action(action)
+
         # add header seperately since Glade can't do it yet
         self.w.main_window.set_titlebar(self.w.headerbar)
         self.w.main_window.show_all()
 
         # most recent scanned image
         self._scanned_image = None
+
 
     @property
     def scanned_image(self):
@@ -57,10 +66,10 @@ class MainWindowHandler:
         self._scanned_image = value
         if value is None:
             self.w.image1.clear()
-            self.w.save_action.set_sensitive(False)
+            self.w.save_action.set_enabled(False)
             self.w.image1.clear()
         else:
-            self.w.save_action.set_sensitive(True)
+            self.w.save_action.set_enabled(True)
 
 
     def on_main_window_delete_event(self, *args):
@@ -140,7 +149,7 @@ class MainWindowHandler:
 
             if devices:
                 self.w.device_combobox.set_active(0)
-                self.w.scan_action.set_sensitive(True)
+                self.w.scan_action.set_enabled(True)
 
             return False
 
