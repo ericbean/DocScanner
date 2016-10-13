@@ -2,6 +2,7 @@
 # Copyright (C) 2016 Eric Beanland <eric.beanland@gmail.com>
 
 import array
+import atexit
 import shutil
 import os
 import sys
@@ -13,6 +14,15 @@ from PIL import Image, ImageFilter, ImageChops
 #Workaround for missing cairo.ImageSurface.create_for_data implementation
 #save to temp png then load into Gtk image widget
 TEMPFILENAME = '.docscanner.png'
+
+def init_sane():
+    """Initialize the sane module and return (sane_version, devices_list)."""
+    sane_version = sane.init()
+    devices = sane.get_devices()
+    atexit.register(sane.exit)
+
+    return sane_version, devices
+
 
 def scan(devid):
     dev = sane.open(devid)

@@ -10,7 +10,7 @@ import sys
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gio, Gtk, GdkPixbuf, GLib
-from DocScanner import imaging, util
+from DocScanner import imaging
 
 UIDIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -139,7 +139,7 @@ class MainWindowHandler:
         """
 
         def initer():
-            sane_version, devices = util.init_sane()
+            sane_version, devices = imaging.init_sane()
             if devices:
                 GLib.idle_add(loader, devices)
 
