@@ -68,6 +68,7 @@ class MainWindowHandler:
             callback = getattr(self, 'on_' + action_name + '_action_activate')
             action.connect('activate', callback)
             self.w.main_window.add_action(action)
+            setattr(self.w, action_name + '_action', action)
 
         # add header seperately since Glade can't do it yet
         self.w.main_window.set_titlebar(self.w.headerbar)
