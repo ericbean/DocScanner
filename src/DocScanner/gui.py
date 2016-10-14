@@ -22,7 +22,7 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 
-from datetime import date
+import datetime
 import tempfile
 import threading
 import os
@@ -114,7 +114,8 @@ class MainWindowHandler:
 
     def on_save_action_activate(self, *args):
         folder = self.w.cwd_filechooserbutton.get_filename()
-        filename = self.w.fn_entry.get_text()
+        spec = self.w.fn_entry.get_text()
+        filename = self.make_filename(spec)
         if self.scanned_image:
             self.scanned_image.write_to_png(folder + '/' + filename)
 
@@ -133,26 +134,6 @@ class MainWindowHandler:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(temp.name, -1,
                 rect.height, True)
             self.w.image1.set_from_pixbuf(pixbuf)
-
-
-    def on_title_entry_changed(self, *args):
-        self.update_fn_entry()
-
-
-    def update_fn_entry(self):
-        title = self.w.title_entry.get_text()
-        if not title:
-            title = "Scanned"
-        date_text = self.w.date_entry.get_text()
-        if not date_text:
-            date_text = str(date.today())
-        fn = date_text + '-' + title + ".png"
-
-        i = 1
-        while os.path.exists(fn):
-            fn = date_text + '-' + title + "_" + i +".png"
-
-        self.w.fn_entry.set_text(fn)
 
 
     def load_sane_devices(self):
@@ -178,6 +159,24 @@ class MainWindowHandler:
         thread = threading.Thread(target=initer)
         thread.daemon = True
         thread.start()
+
+
+    def make_filename(self, spec):
+        """Replace template variables in a string to create a filename.
+
+            spec: str with %title, %date
+
+            returns: str filename
+        """
+        title = self.w.title_entry.get_text() or 'Scanned'
+        name = spec.replace('%title', title)
+        date = self.w.date_entry.get_text() or str(datetime.date.today())
+        name = name.replace('%date', date)
+
+        if name[-4:].lower() != '.png':
+            name += '.png'
+
+        return name
 
 ##############################################################################
 
