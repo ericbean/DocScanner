@@ -164,14 +164,17 @@ class MainWindowHandler:
     def make_filename(self, spec):
         """Replace template variables in a string to create a filename.
 
-            spec: str with %title, %date
+            spec: str with %title, %date, %time
 
             returns: str filename
         """
         title = self.w.title_entry.get_text() or 'Scanned'
         name = spec.replace('%title', title)
-        date = self.w.date_entry.get_text() or str(datetime.date.today())
-        name = name.replace('%date', date)
+        now = datetime.datetime.now()
+        # date & times are not localized to ensure files can be sorted
+        # lexicographically. Mimics ISO 8601 formating
+        name = name.replace('%date', now.strftime('%Y-%m-%d'))
+        name = name.replace('%time', now.strftime('%H:%M'))
 
         if name[-4:].lower() != '.png':
             name += '.png'
