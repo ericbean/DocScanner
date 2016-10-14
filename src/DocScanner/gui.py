@@ -128,9 +128,9 @@ class MainWindowHandler:
         rect = self.w.image1.get_allocation()
         # dump surface to file and load into a GdkPixbuf scaled to fit
         # the Gtk.Image's allocation
-        with tempfile.NamedTemporaryFile() as tempfile:
-            self.scanned_image.write_to_png(tempfile)
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(tempfile.name, -1,
+        with tempfile.NamedTemporaryFile() as temp:
+            self.scanned_image.write_to_png(temp)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(temp.name, -1,
                 rect.height, True)
             self.w.image1.set_from_pixbuf(pixbuf)
 
